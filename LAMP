@@ -1,0 +1,23 @@
+#!/bin/bash
+
+yum install -y httpd
+systemctl start httpd.service
+systemctl enable httpd.service
+yum install -y  mariadb-server mariadb
+systemctl start mariadb
+systemctl enable mariadb.service 
+
+mysql_secure_installation
+yum install -y php php-mysql 
+systemctl restart httpd.service
+
+echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+
+
+
+
+
+
+
+
+
