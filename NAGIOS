@@ -1,0 +1,33 @@
+#!/bin/bash
+
+yum install -y gcc glibc glibc-common gd gd-devel make net-snmp openssl-devel xinetd unzip
+
+useradd nagios
+groupadd nagcmd
+usermod -a -G nagcmd nagios
+cd ~
+curl -L -O https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.1.1.tar.gz
+tar xvf nagios-*.tar.gz
+cd nagios-*
+./configure --with-command-group=nagcmd 
+make all
+make install
+make install-commandmode
+make install-init
+make install-config
+make install-webconf	
+usermod -G nagcmd apache
+
+
+
+cd ~
+curl -L -O http://nagios-plugins.org/download/nagios-plugins-2.1.1.tar.gz
+
+tar xvf nagios-plugins-*.tar.gz
+
+cd nagios-plugins-*
+
+./configure --with-nagios-user=nagios --with-nagios-group=nagios --with-openssl
+
+make
+make install
